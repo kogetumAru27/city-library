@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "./Providers";
-import LoginButton from "@/components/LoginButton";
-
+import Navigation from "@/components/Nav";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -31,8 +30,8 @@ export default function RootLayout({
     >
       <body className="min-h-full flex flex-col">
         <Providers>
-        <LoginButton/>
         {children}
+        <Navigation/>
         </Providers>
         </body>
     </html>

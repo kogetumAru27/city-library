@@ -13,16 +13,16 @@ const starTypeLabels = {
 export default async function PostPage(){
     const posts = await prisma.post.findMany();
     return(
-        <div>
+        <div className="min-h-screen bg-gray-900 text-white p-4 pb-20">
         <Link href="/posts/new">
-            <button>新しく投稿する</button>
+            <button className="w-full bg-yellow-300 text-gray-900 font-bold py-3 rounded-full mb-6 hover:bg-yellow-400 transition">＋新しく投稿する</button>
         </Link>
         {posts.map(post => (
             <Link href={`/posts/${post.id}`} key={post.id}>
-           <div>
-            <p>{post.location}</p>
-            <p>{starTypeLabels[post.starType]}</p>
-            <p>{post.caption}</p>
+           <div className="bg-gray-800 rounded-2xl p-4 mb-4 hover:bg-gray-700 transition">
+            <p className="text-yellow-300 font-bold m-2">{post.location}</p>
+            <p className="text-gray-400 text-sm">{starTypeLabels[post.starType]}</p>
+            <p className="text-white mt-1">{post.caption}</p>
             <PostImage src={post.imageUrl} alt={post.location}/>
            </div> 
            </Link>

@@ -19,3 +19,22 @@ export async function createPosts(formData:FormData){
     });
     redirect("/posts")
 }
+export async function Delete(id:string){
+    await prisma.post.delete({
+        where:{id}
+    });
+    redirect("/posts");
+}
+
+export async function Update(formData:FormData){
+    const location = formData.get("location") as string;
+    const starType = formData.get("starType") as StarType;
+    const caption = formData.get("caption") as string;
+    const imageUrl = formData.get("imageUrl")as string;
+    const id = formData.get("id") as string
+    await prisma.post.update({
+        where:{ id },
+        data:{location,starType,caption,imageUrl}
+    }) 
+redirect("/posts");
+}

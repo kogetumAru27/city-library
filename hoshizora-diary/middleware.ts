@@ -2,8 +2,8 @@ import { NextRequest,NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 export async function middleware(request:NextRequest){
     const token = await getToken({req:request});
-    if(!token && request.nextUrl.pathname.startsWith("/posts")){
-        return NextResponse.redirect(new URL("/",request.url));
+    if(!token && (request.nextUrl.pathname.startsWith("/posts")|| request.nextUrl.pathname.startsWith("/mypage"))){
+        return NextResponse.redirect(new URL(`/`,request.url));
     }
     return NextResponse.next();
 }
