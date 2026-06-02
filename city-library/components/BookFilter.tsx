@@ -61,7 +61,7 @@ export function Bookfilter({books}:{books:Book[]}){
     .filter(book => {
         const seartchMatch = (book.title.includes(state.search)||book?.author?.includes(state.search) ||typeLabel[book?.type].includes(state.search))
         const TypeMatch = (state.type === "全て" || state.type === book.type)
-        const distanceMatch = !userLocation ||!book.latitude ||!book.longitude || calcDistance(userLocation.lat,userLocation.lon,book.latitude!,book.longitude) <= 15;
+        const distanceMatch = true;
         return seartchMatch && TypeMatch && distanceMatch;
     })
     .sort((a,b) => state.sort === "新しい順"?new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime():
