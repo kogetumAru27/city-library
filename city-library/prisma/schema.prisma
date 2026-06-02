@@ -1,0 +1,79 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+enum Role {
+  USER
+  ADMIN
+}
+model User {
+  id        String  @id @default(cuid())
+  name      String  
+  email     String  @unique
+  address   String?
+  latitude  Float?
+  longitude Float?
+  role      Role    @default(USER)
+  createdAt DateTime @default(now())
+  loans     Loan[]
+  notifications Notification[]
+}
+model Book {
+  id        String   @id @default(cuid())
+  title     String
+  author    String?
+  stock     Int
+  latitude  Float?
+  longitude Float?
+  type      BookType
+  location  String
+  loans     Loan[]
+  createdAt DateTime @default(now())
+}
+enum BookType {
+  NOVEL         
+  LITERATURE    
+  ESSAY         
+  SCIENCE       
+  HISTORY       
+  MANGA        
+  ACADEMIC      
+  OTHERS        
+}
+model Loan {
+  id          String  @id @default(cuid())
+  userId      String
+  user    User   @relation(fields: [userId], references: [id])
+  bookId      String
+  book    Book   @relation(fields: [bookId], references:[id])
+  startDate   DateTime
+  endDate     DateTime
+  returnedAt  DateTime?
+  status      LoanStuts
+  createdAt   DateTime @default(now())
+  notifications Notification[]
+}
+enum LoanStuts{
+  BORROWING 
+  RETURNED  
+  OVERDUE   
+}
+model Notification {
+  id         String  @id @default(cuid())
+  userId     String
+  user       User    @relation(fields:[userId],references:[id])
+  loanId     String
+  loan       Loan    @relation(fields:[loanId],references:[id])
+  message    String
+  isRead     Boolean
+  createdAt  DateTime @default(now())
+}
