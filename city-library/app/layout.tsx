@@ -34,14 +34,14 @@ export default async function RootLayout({
     >
       <body className="h-full">
       <Providers>
-      <nav className="flex gap-4 p-4 bg-gray-100">
-            <Link href="/">ホーム</Link>
-            <Link href="/books">本の一覧</Link>
-            <Link href="/mypage">マイページ</Link>
+      <nav className="flex justify-center gap-4 p-4 bg-gray-100">
+            <Link href="/" className="hover:underline">ホーム</Link>
+            <Link href="/books" className="hover:underline">本の一覧</Link>
+            <Link href="/mypage" className="hover:underline">マイページ</Link>
             {session?.user?.role === "ADMIN" && (
               <>
-                <Link href="/admin/books">本の管理</Link>
-                <Link href="/admin/loans">貸出状況</Link>
+                <Link href="/admin/books" className="hover:underline">本の管理</Link>
+                <Link href="/admin/loans" className="hover:underline">貸出状況</Link>
               </>
             )}
           </nav>
