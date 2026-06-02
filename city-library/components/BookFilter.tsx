@@ -54,7 +54,7 @@ function calcDistance(lat1:number,lon1:number,lat2:number,lon2:number){
     const c = 2 * Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
     return R * c
 }
-export function Bookfilter({books}:{books:Book[]}){
+export function Bookfilter({books, hasActive}:{books:Book[], hasActive:boolean}){
     const [userLocation,setUserLocation] = useState<{lat:number,lon:number} | null> (null);
     const [state,dispatch] = useReducer(redcur,initialState);
     const filtered = books
@@ -67,14 +67,22 @@ export function Bookfilter({books}:{books:Book[]}){
     .sort((a,b) => state.sort === "新しい順"?new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime():
 new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
 useEffect(() => {
- const watchId = navigator.geolocation.watchPosition((position) => {
-    const lat = position.coords.latitude;
-    const lon = position.coords.longitude
-    setUserLocation({lat,lon});
-    checkLocation(lat, lon);
- });
- return () => navigator.geolocation.clearWatch(watchId);
-},[]);
+    if(!hasActive) return;
+    
+    const getLocation = () => {
+        navigator.geolocation.getCurrentPosition((position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+            setUserLocation({lat, lon});
+            checkLocation(lat, lon);
+        });
+    };
+    
+    getLocation();
+    const intervalId = setInterval(getLocation, 6 * 60 * 60 * 1000);
+    
+    return () => clearInterval(intervalId);
+}, [hasActive]);
 
 return(
     <div className="p-8">
