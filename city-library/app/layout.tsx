@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/Provider";
+import { getServerSession } from "next-auth";
+import { authOptions } from "./api/auth/[...nextauth]/route";
+import Link from "next/link";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -17,11 +20,13 @@ export const metadata: Metadata = {
   description: "みんなの図書管理システム",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
-}>) {
+}>) 
+{
+  const session = await getServerSession(authOptions)
   return (
     <html
       lang="ja"
@@ -29,6 +34,17 @@ export default function RootLayout({
     >
       <body className="h-full">
       <Providers>
+      <nav className="flex gap-4 p-4 bg-gray-100">
+            <Link href="/">ホーム</Link>
+            <Link href="/books">本の一覧</Link>
+            <Link href="/mypage">マイページ</Link>
+            {session?.user?.role === "ADMIN" && (
+              <>
+                <Link href="/admin/books">本の管理</Link>
+                <Link href="/admin/loans">貸出状況</Link>
+              </>
+            )}
+          </nav>
         {children}
       </Providers>
       </body>
